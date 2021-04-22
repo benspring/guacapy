@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_hotp_token(secret, intervals_no):
+    secret += "=" * ((4 - len(secret) % 4) % 4) # Fix python3 padding issue
     key = base64.b32decode(secret, True)
     msg = struct.pack(">Q", intervals_no)
     h = bytes(hmac.new(key, msg, hashlib.sha1).digest())
